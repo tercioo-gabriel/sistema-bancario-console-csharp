@@ -10,7 +10,6 @@ namespace SistemaBancarioConsole.Services
 {
     internal class LoginService
     {
-        //RepositorioUsuario loginUser = new RepositorioUsuario();
         private RepositorioUsuario _repositorioUsuario;
 
         public LoginService(RepositorioUsuario repo)
