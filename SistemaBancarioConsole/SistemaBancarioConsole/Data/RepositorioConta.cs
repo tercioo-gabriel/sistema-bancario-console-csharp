@@ -11,13 +11,16 @@ namespace SistemaBancarioConsole.Data
 {
     internal class RepositorioConta
     {
+        private const int TIPO_CONTA_CORRENTE = 1;
+        private const int TIPO_CONTA_POUPANCA = 2;
+
         private List<ContaBancaria> _contas;
         private const string NOME_ARQUIVO_CONTAS = "contas.txt";
 
         public RepositorioConta()
         {
             _contas = new List<ContaBancaria>();
-            //CarregarContas();
+            CarregarContas();
         }
 
         private void CarregarContas()
@@ -43,10 +46,11 @@ namespace SistemaBancarioConsole.Data
                 }
                 else
                 {
-                    Console.WriteLine($"Erro ao carregar conta: Saldo inválido '{saldoString}' na linha '{linha}'.");
+                    Console.WriteLine($"ERRO: Erro ao carregar conta: Saldo inválido '{saldoString}' na linha '{linha}'.");
                 }
             }
         }
+
         public void SalvarContas()
         {
             List<string> linhasParaEscrever = new List<string>();
@@ -59,14 +63,47 @@ namespace SistemaBancarioConsole.Data
 
             ArquivoHelper.EscreverLinhas(NOME_ARQUIVO_CONTAS, linhasParaEscrever);
         }
-
-        public void AdicionarConta(ContaBancaria novaConta)
+        
+        public void AdicionarConta(string nomeUsuario, string numeroContaBase, bool criarContaPoupanca)
         {
-            _contas.Add(novaConta);
+            if(numeroContaBase.Length < 3 || numeroContaBase.Length > 5) 
+            {
+                Console.WriteLine("ERRO: Número da conta deve ter entre 3 e 5 dígitos.");
+                return;
+            }
+
+            foreach (char c in numeroContaBase)
+            {
+                if (!char.IsDigit(c))
+                {
+                    Console.WriteLine("ERRO: O número da conta deve conter apenas dígitos.");
+                    return;
+                }
+            }
+
+            if (_contas.Any(c => c.NumeroConta == numeroContaBase || c.NumeroConta == "0" + numeroContaBase))
+            {
+                Console.WriteLine($"ERRO: Uma conta com o número {numeroContaBase} (ou sua poupança) já existe.");
+                return;
+            }
+
+            ContaBancaria contaCorrente = new ContaBancaria(TIPO_CONTA_CORRENTE, numeroContaBase, 0m, nomeUsuario);
+            _contas.Add(contaCorrente);
+            Console.WriteLine($"Conta corrente {contaCorrente.NumeroConta} criada com sucesso para {nomeUsuario}! :)");
+
+            if (criarContaPoupanca)
+            {
+                string numeroContaPoupanca = "0" + numeroContaBase;
+                ContaBancaria contaPoupanca = new ContaBancaria(TIPO_CONTA_POUPANCA, numeroContaPoupanca, 0m, nomeUsuario);
+
+                _contas.Add(contaPoupanca);
+                Console.WriteLine($"Conta poupança {contaPoupanca.NumeroConta} associada criada com sucesso para {nomeUsuario}!");
+            }
+
             SalvarContas();
         }
 
-        public ContaBancaria BuscarPorNumeroConta(string numConta)
+        public ContaBancaria? BuscarPorNumeroConta(string numConta)
         {
             foreach (var conta in _contas)
             {
@@ -78,6 +115,19 @@ namespace SistemaBancarioConsole.Data
             }
 
             return null;
+        }
+
+        public void AtualizarConta(ContaBancaria contaAtualizada) 
+        {
+            for(int i = 0; i < _contas.Count; i++)
+            {
+                if (_contas[i].NumeroConta.Equals(contaAtualizada.NumeroConta, StringComparison.OrdinalIgnoreCase))
+                {
+                    _contas[i] = contaAtualizada;
+                    SalvarContas();
+                    Console.WriteLine("Conta atualizada com Sucesso");
+                }
+            }
         }
     }
 }

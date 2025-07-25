@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SistemaBancarioConsole.Models; // Importa a classe Usuario
-using SistemaBancarioConsole.Utils;  // Importa a classe ArquivoHelper
+using SistemaBancarioConsole.Models;
+using SistemaBancarioConsole.Utils;
 using System.Collections.Generic;
 
 namespace SistemaBancarioConsole.Data

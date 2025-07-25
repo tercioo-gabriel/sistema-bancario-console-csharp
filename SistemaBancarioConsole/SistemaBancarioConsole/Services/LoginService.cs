@@ -12,16 +12,16 @@ namespace SistemaBancarioConsole.Services
     {
         private RepositorioUsuario _repositorioUsuario;
 
-        public LoginService(RepositorioUsuario repo)
+        public LoginService(RepositorioUsuario repoUser)
         {
-            _repositorioUsuario = repo;
+            _repositorioUsuario = repoUser;
         }
 
         public void RegistrarUsuario(string nomeUsuario, string senhaUsuario) 
         {
             if (_repositorioUsuario.BuscarPorNome(nomeUsuario) != null) 
             {
-                Console.WriteLine("Usuário já existe. Tente novamente.");
+                Console.WriteLine("ERRO: Usuário já existe. Tente novamente.");
                 return;
             }
             else 
@@ -38,7 +38,7 @@ namespace SistemaBancarioConsole.Services
 
             if (usuarioEncontrado == null)
             {
-                Console.WriteLine("Usuário não encontrado. Tente novamente.");
+                Console.WriteLine("ERRO: Usuário não encontrado. Tente novamente.");
                 return null;
             }
             else
@@ -50,7 +50,7 @@ namespace SistemaBancarioConsole.Services
                 }
                 else
                 {
-                    Console.WriteLine("Senha incorreta. Tente novamente.");
+                    Console.WriteLine("ERRO: Senha incorreta. Tente novamente.");
                     return null;
                 }
             }
