@@ -8,14 +8,14 @@ namespace SistemaBancarioConsole.Models
 {
     internal class Usuario
     {
-        public string NomeUsuario { get; set; }
-        public string SenhaUsuario { get; set; }
+        public string Nome { get; set; }
+        public string Senha { get; set; }
 
 
-        public Usuario(string nomeUsuario, string senhaUsuario)
+        public Usuario(string nome, string senha)
         {
-            NomeUsuario = nomeUsuario;
-            SenhaUsuario = senhaUsuario;
+            Nome = nome;
+            Senha = senha;
         }
       
     }

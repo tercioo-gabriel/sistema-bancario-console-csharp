@@ -57,12 +57,20 @@ namespace SistemaBancarioConsole.Program
                                 string? nomeLogin = Console.ReadLine();
                                 Console.Write("Digite a senha: ");
                                 string? senhaLogin = Console.ReadLine();
-
-                                usuarioLogado = loginService.ValidarLogin(nomeLogin, senhaLogin);
-
-                                if (usuarioLogado != null)
+                                
+                                if (string.IsNullOrWhiteSpace(nomeLogin) || string.IsNullOrWhiteSpace(senhaLogin))
                                 {
-                                    Console.WriteLine($"Login bem sucedido. Bem-vindo(a), {usuarioLogado.NomeUsuario}!");
+                                    Console.WriteLine("ERRO: Nome de usuário e senha não podem ser vazios para login.");
+                                }
+                                else
+                                {
+                                    usuarioLogado = loginService.ValidarLogin(nomeLogin, senhaLogin);
+
+                                    if (usuarioLogado != null)
+                                    {
+                                        Console.WriteLine($"Login bem sucedido. Bem-vindo(a), {usuarioLogado.Nome}!");
+                                        break;
+                                    }
                                 }
                                 break;
 
@@ -80,11 +88,10 @@ namespace SistemaBancarioConsole.Program
                     {
                         Console.WriteLine("ERRO: Entrada inválida. Por favor, digite um número válido.");
                     }
-
                 }
                 else 
                 {
-                    Console.WriteLine($"\n--- Menu de Operações Bancárias ({usuarioLogado.NomeUsuario}) ---");
+                    Console.WriteLine($"\n--- Menu de Operações Bancárias ({usuarioLogado.Nome}) ---");
                     Console.WriteLine("1. Criar Conta Bancária (Corrente/Poupança)");
                     Console.WriteLine("2. Realizar Depósito");
                     Console.WriteLine("3. Realizar Saque");
@@ -115,7 +122,7 @@ namespace SistemaBancarioConsole.Program
                                 }
                                 else
                                 {
-                                    repositorioConta.AdicionarConta(usuarioLogado.NomeUsuario, numeroContaBase, criarPoupanca);
+                                    repositorioConta.AdicionarConta(usuarioLogado.Nome, numeroContaBase, criarPoupanca);
                                 }
                                 break;
 
